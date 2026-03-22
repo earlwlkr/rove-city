@@ -24,8 +24,10 @@ export default function MapPage() {
 
   return (
     <>
-      <NavBar />
-      <main className="h-screen pb-16 md:pt-16 md:pb-0">
+      <div className="hidden md:block">
+        <NavBar />
+      </div>
+      <main className="h-screen md:pt-16">
         <div className="h-full relative">
           {posts === undefined ? (
             <div className="flex items-center justify-center h-full">
@@ -35,7 +37,7 @@ export default function MapPage() {
             <MapView posts={posts} />
           )}
 
-          <div className="absolute bottom-20 md:bottom-6 right-4 z-[1000] bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-lg border border-stone-200">
+          <div className="absolute bottom-6 right-4 z-[1000] bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-lg border border-stone-200">
             <p className="text-xs font-semibold text-stone-700 mb-2">Markers</p>
             <div className="flex items-center gap-2 mb-1.5">
               <div

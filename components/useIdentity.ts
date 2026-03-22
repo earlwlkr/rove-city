@@ -24,8 +24,10 @@ export function useIdentity() {
   const [userId, setUserId] = useState<Id<"users"> | null>(null);
   const createUser = useMutation(api.users.create);
   const updateNameMutation = useMutation(api.users.updateDisplayName);
+  const assignGeneratedName = useMutation(api.users.assignGeneratedName);
   const user = useQuery(api.users.getUser, userId ? { userId } : "skip");
   const creatingRef = useRef(false);
+  const renamingRef = useRef(false);
 
   useEffect(() => {
     const stored = getStoredUserId();
@@ -33,7 +35,7 @@ export function useIdentity() {
       setUserId(stored);
     } else if (!creatingRef.current) {
       creatingRef.current = true;
-      createUser({ name: "Anonymous" }).then((id) => {
+      createUser({}).then((id) => {
         setStoredUserId(id);
         setUserId(id);
       });
@@ -45,12 +47,23 @@ export function useIdentity() {
     if (userId && user === null && !creatingRef.current) {
       creatingRef.current = true;
       clearStoredUserId();
-      createUser({ name: "Anonymous" }).then((id) => {
+      createUser({}).then((id) => {
         setStoredUserId(id);
         setUserId(id);
       });
     }
   }, [userId, user, createUser]);
+
+  useEffect(() => {
+    if (!userId || user?.name !== "Anonymous" || renamingRef.current) {
+      return;
+    }
+
+    renamingRef.current = true;
+    assignGeneratedName({ userId }).finally(() => {
+      renamingRef.current = false;
+    });
+  }, [userId, user?.name, assignGeneratedName]);
 
   const updateName = useCallback(
     async (name: string) => {
