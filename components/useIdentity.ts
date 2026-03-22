@@ -6,6 +6,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import type { Id } from "@/convex/_generated/dataModel";
 
 const USER_ID_KEY = "rove-user-id";
+let pendingUserCreation: Promise<Id<"users">> | null = null;
 
 function getStoredUserId(): Id<"users"> | null {
   if (typeof window === "undefined") return null;
@@ -26,33 +27,47 @@ export function useIdentity() {
   const updateNameMutation = useMutation(api.users.updateDisplayName);
   const assignGeneratedName = useMutation(api.users.assignGeneratedName);
   const user = useQuery(api.users.getUser, userId ? { userId } : "skip");
-  const creatingRef = useRef(false);
   const renamingRef = useRef(false);
 
-  useEffect(() => {
+  const ensureUser = useCallback(async () => {
     const stored = getStoredUserId();
     if (stored) {
       setUserId(stored);
-    } else if (!creatingRef.current) {
-      creatingRef.current = true;
-      createUser({}).then((id) => {
-        setStoredUserId(id);
-        setUserId(id);
-      });
+      return stored;
     }
+
+    if (!pendingUserCreation) {
+      pendingUserCreation = createUser({})
+        .then((id) => {
+          setStoredUserId(id);
+          return id;
+        })
+        .finally(() => {
+          pendingUserCreation = null;
+        });
+    }
+
+    const id = await pendingUserCreation;
+    setUserId(id);
+    return id;
   }, [createUser]);
+
+  useEffect(() => {
+    ensureUser().catch((err) => {
+      console.error("Failed to initialize identity:", err);
+    });
+  }, [ensureUser]);
 
   // If stored ID points to a deleted user, create a new one
   useEffect(() => {
-    if (userId && user === null && !creatingRef.current) {
-      creatingRef.current = true;
+    if (userId && user === null) {
       clearStoredUserId();
-      createUser({}).then((id) => {
-        setStoredUserId(id);
-        setUserId(id);
+      setUserId(null);
+      ensureUser().catch((err) => {
+        console.error("Failed to recover identity:", err);
       });
     }
-  }, [userId, user, createUser]);
+  }, [userId, user, ensureUser]);
 
   useEffect(() => {
     if (!userId || user?.name !== "Anonymous" || renamingRef.current) {
