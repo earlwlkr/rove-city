@@ -18,7 +18,23 @@ export const createPost = mutation({
     storageId: v.id("_storage"),
   },
   handler: async (ctx, args) => {
-    await ctx.db.insert("posts", args);
+    const postId = await ctx.db.insert("posts", args);
+    return postId;
+  },
+});
+
+/** Called by the AI action to persist vision-model results. */
+export const saveAiTags = mutation({
+  args: {
+    postId: v.id("posts"),
+    aiCaption: v.optional(v.string()),
+    tags: v.optional(v.array(v.string())),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.postId, {
+      aiCaption: args.aiCaption,
+      tags: args.tags,
+    });
   },
 });
 
@@ -87,6 +103,8 @@ export const getAllPostsForMap = query({
           userName: user?.name ?? "Anonymous",
           isOwn: args.userId ? post.userId === args.userId : false,
           _creationTime: post._creationTime,
+          tags: post.tags,
+          aiCaption: post.aiCaption,
         };
       })
     );

@@ -13,5 +13,8 @@ export default defineSchema({
     latitude: v.number(),
     longitude: v.number(),
     storageId: v.id("_storage"),
+    // AI-generated fields (populated asynchronously after upload)
+    aiCaption: v.optional(v.string()),
+    tags: v.optional(v.array(v.string())),
   }).index("by_user", ["userId"]),
 });
