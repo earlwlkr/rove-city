@@ -1,25 +1,49 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
-import { PwaRegister } from "@/components/PwaRegister";
+
+export const viewport: Viewport = {
+  themeColor: "#0ea5e9",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
-  title: "Rove — Location-Based Travel Journal",
+  title: "Rove City",
   description:
     "Capture photos tied to places, share them in a global feed, and explore memories on an interactive map.",
   manifest: "/manifest.json",
-  themeColor: "#0d9488",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Rove",
+    title: "Rove City",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    title: "Rove City",
+    description:
+      "Capture photos tied to places, share them in a global feed, and explore memories on an interactive map.",
+    siteName: "Rove City",
+  },
+  twitter: {
+    card: "summary",
+    title: "Rove City",
+    description:
+      "Capture photos tied to places, share them in a global feed, and explore memories on an interactive map.",
   },
   icons: {
     icon: [
       { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
       { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: "/icons/icon-192.png",
+    apple: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
   },
 };
 
@@ -29,17 +53,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="manifest" href="/manifest.json" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Rove" />
-        <meta name="theme-color" content="#0d9488" />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <meta name="apple-mobile-web-app-title" content="Rove City" />
+        <meta name="application-name" content="Rove City" />
+        <meta name="msapplication-TileColor" content="#0ea5e9" />
+        <meta name="msapplication-tap-highlight" content="no" />
       </head>
       <body className="antialiased">
         <Providers>{children}</Providers>
-        <PwaRegister />
       </body>
     </html>
   );
