@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import type { Id } from "@/convex/_generated/dataModel";
 
 const USER_ID_KEY = "rove-user-id";
@@ -25,9 +25,7 @@ export function useIdentity() {
   const [userId, setUserId] = useState<Id<"users"> | null>(null);
   const createUser = useMutation(api.users.create);
   const updateNameMutation = useMutation(api.users.updateDisplayName);
-  const assignGeneratedName = useMutation(api.users.assignGeneratedName);
   const user = useQuery(api.users.getUser, userId ? { userId } : "skip");
-  const renamingRef = useRef(false);
 
   const ensureUser = useCallback(async () => {
     const stored = getStoredUserId();
@@ -68,17 +66,6 @@ export function useIdentity() {
       });
     }
   }, [userId, user, ensureUser]);
-
-  useEffect(() => {
-    if (!userId || user?.name !== "Anonymous" || renamingRef.current) {
-      return;
-    }
-
-    renamingRef.current = true;
-    assignGeneratedName({ userId }).finally(() => {
-      renamingRef.current = false;
-    });
-  }, [userId, user?.name, assignGeneratedName]);
 
   const updateName = useCallback(
     async (name: string) => {

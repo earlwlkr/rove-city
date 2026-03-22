@@ -55,7 +55,7 @@ export const getFeed = query({
         const imageUrl = await ctx.storage.getUrl(post.storageId);
         return {
           ...post,
-          userName: user?.name ?? "Anonymous",
+          userName: user?.name ?? "Traveler",
           imageUrl,
           isOwn: args.userId ? post.userId === args.userId : false,
         };
@@ -100,7 +100,7 @@ export const getAllPostsForMap = query({
           latitude: post.latitude,
           longitude: post.longitude,
           imageUrl,
-          userName: user?.name ?? "Anonymous",
+          userName: user?.name ?? "Traveler",
           isOwn: args.userId ? post.userId === args.userId : false,
           _creationTime: post._creationTime,
           tags: post.tags,

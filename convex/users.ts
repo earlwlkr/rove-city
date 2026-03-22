@@ -51,14 +51,14 @@ function randomItem<T>(items: readonly T[]) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
-function createAnonymousName() {
+function createRandomUserName() {
   const suffix = Math.floor(100 + Math.random() * 900);
   return `${randomItem(ADJECTIVES)} ${randomItem(NOUNS)} ${suffix}`;
 }
 
-async function generateUniqueAnonymousName(ctx: MutationCtx) {
+async function generateUniqueUserName(ctx: MutationCtx) {
   for (let attempt = 0; attempt < 10; attempt += 1) {
-    const generatedName = createAnonymousName();
+    const generatedName = createRandomUserName();
     const existingUser = await ctx.db
       .query("users")
       .withIndex("by_name", (q) => q.eq("name", generatedName))
@@ -80,7 +80,7 @@ export const create = mutation({
       return await ctx.db.insert("users", { name: requestedName });
     }
 
-    const generatedName = await generateUniqueAnonymousName(ctx);
+    const generatedName = await generateUniqueUserName(ctx);
     return await ctx.db.insert("users", { name: generatedName });
   },
 });
@@ -96,23 +96,5 @@ export const updateDisplayName = mutation({
   args: { userId: v.id("users"), name: v.string() },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.userId, { name: args.name });
-  },
-});
-
-export const assignGeneratedName = mutation({
-  args: { userId: v.id("users") },
-  handler: async (ctx, args) => {
-    const user = await ctx.db.get(args.userId);
-    if (!user) {
-      return null;
-    }
-
-    if (user.name !== "Anonymous") {
-      return user.name;
-    }
-
-    const generatedName = await generateUniqueAnonymousName(ctx);
-    await ctx.db.patch(args.userId, { name: generatedName });
-    return generatedName;
   },
 });
