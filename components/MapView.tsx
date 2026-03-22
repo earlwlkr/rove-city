@@ -4,6 +4,7 @@ import { useEffect, useRef, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { PostCard } from "./PostCard";
 
 interface MapPost {
   _id: string;
@@ -89,54 +90,17 @@ function PostMarker({ post }: { post: MapPost }) {
   return (
     <Marker position={[post.latitude, post.longitude]} icon={icon}>
       <Popup className="premium-popup">
-        <div className="w-[280px] bg-white/80 backdrop-blur-2xl border border-white/60 shadow-[0_16px_40px_-8px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden font-sans">
-          {post.imageUrl ? (
-            <div className="relative h-44 w-full">
-              <img
-                src={post.imageUrl}
-                alt={post.caption || 'Memory location'}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute bottom-0 left-0 p-4 w-full">
-                <p className="text-white font-medium text-[15px] leading-snug drop-shadow-md line-clamp-2">
-                  {post.caption || "A beautiful memory"}
-                </p>
-              </div>
-            </div>
-          ) : (
-             <div className="p-4 bg-gradient-to-br from-stone-50 to-stone-100">
-                <p className="text-stone-800 font-medium text-[15px] leading-snug mb-2">
-                  {post.caption || "A beautiful memory"}
-                </p>
-             </div>
-          )}
-          
-          <div className="p-4 bg-white/95">
-            <div className="flex flex-col gap-3">
-              <div className="flex items-start gap-2.5">
-                <div className="mt-0.5 min-w-[20px] h-5 rounded-full bg-stone-100/80 flex items-center justify-center text-stone-500 shadow-sm border border-stone-200/50">
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                  </svg>
-                </div>
-                <span className="text-sm font-semibold text-stone-800 leading-tight flex-1">{post.locationName}</span>
-              </div>
-              
-              <div className="flex items-center justify-between pt-3 border-t border-stone-100/80">
-                <div className="flex items-center gap-2">
-                  <div className="w-[22px] h-[22px] rounded-full bg-stone-800 flex items-center justify-center text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
-                    {post.userName.charAt(0).toUpperCase()}
-                  </div>
-                  <p className="text-[13px] font-medium text-stone-600">{post.userName}</p>
-                </div>
-                <span className="text-[11px] font-bold text-stone-400/80 uppercase tracking-widest bg-stone-50 px-2 py-0.5 rounded-sm">
-                  {new Date(post._creationTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                </span>
-              </div>
-            </div>
-          </div>
+        <div className="w-[280px]">
+          <PostCard
+            _id={post._id}
+            caption={post.caption}
+            locationName={post.locationName}
+            latitude={post.latitude}
+            longitude={post.longitude}
+            imageUrl={post.imageUrl}
+            userName={post.userName}
+            _creationTime={post._creationTime}
+          />
         </div>
       </Popup>
     </Marker>

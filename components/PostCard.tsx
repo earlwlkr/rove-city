@@ -51,23 +51,23 @@ export function PostCard({
             {userName.charAt(0).toUpperCase()}
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-stone-900 truncate">
+            <div className="text-sm font-semibold text-stone-900 truncate">
               {userName}
-            </p>
-            <p className="text-xs text-stone-400">
+            </div>
+            <div className="text-xs text-stone-400">
               {formatDistanceToNow(_creationTime)}
-            </p>
+            </div>
           </div>
         </div>
 
         {caption && (
-          <p
+          <div
             className={`text-stone-700 leading-relaxed mb-3 ${
               featured ? "text-base" : "text-sm"
             }`}
           >
             {caption}
-          </p>
+          </div>
         )}
 
         <div className="flex items-center gap-1.5 text-xs text-stone-400">
