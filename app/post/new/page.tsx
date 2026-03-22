@@ -1,19 +1,19 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { useMutation } from "convex/react";
+import { useMutation, useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useRouter } from "next/navigation";
 import { NavBar } from "@/components/NavBar";
 import { LocationSearch } from "@/components/LocationSearch";
 import { useIdentity } from "@/components/useIdentity";
 
-
 export default function NewPostPage() {
   const { userId, isLoading } = useIdentity();
   const router = useRouter();
   const generateUploadUrl = useMutation(api.posts.generateUploadUrl);
   const createPost = useMutation(api.posts.createPost);
+  const tagPhoto = useAction(api.ai.tagPhoto);
 
   const [caption, setCaption] = useState("");
   const [location, setLocation] = useState<{
@@ -24,6 +24,7 @@ export default function NewPostPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [aiStatus, setAiStatus] = useState<"idle" | "tagging" | "done" | "error">("idle");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = useCallback((f: File | null) => {
@@ -76,6 +77,7 @@ export default function NewPostPage() {
 
     setSubmitting(true);
     try {
+      // 1. Resize and upload the image
       const resized = await resizeImage(file);
       const uploadUrl = await generateUploadUrl();
       const result = await fetch(uploadUrl, {
@@ -85,7 +87,8 @@ export default function NewPostPage() {
       });
       const { storageId } = await result.json();
 
-      await createPost({
+      // 2. Create the post record
+      const postId = await createPost({
         userId,
         caption: caption.trim() || undefined,
         locationName: location.name,
@@ -93,6 +96,17 @@ export default function NewPostPage() {
         longitude: location.longitude,
         storageId,
       });
+
+      // 3. Fire-and-forget AI tagging (non-blocking)
+      if (postId) {
+        setAiStatus("tagging");
+        tagPhoto({ postId, storageId })
+          .then(() => setAiStatus("done"))
+          .catch((err) => {
+            console.error("[AI] Tagging failed:", err);
+            setAiStatus("error");
+          });
+      }
 
       router.push("/");
     } catch (err) {
@@ -214,6 +228,14 @@ export default function NewPostPage() {
                   selectedName={location?.name}
                 />
               </div>
+
+              {/* AI tagging status (visible while tagging is in progress) */}
+              {aiStatus === "tagging" && (
+                <p className="text-xs text-teal-600 flex items-center gap-1.5">
+                  <span className="inline-block w-3 h-3 border-2 border-teal-300 border-t-teal-600 rounded-full animate-spin" />
+                  AI is tagging your photo in the background…
+                </p>
+              )}
 
               {/* Submit */}
               <button
