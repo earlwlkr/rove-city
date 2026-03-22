@@ -37,7 +37,7 @@ export default function MapPage() {
             <MapView posts={posts} />
           )}
 
-          <div className="absolute bottom-6 right-4 z-[1000] bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-lg border border-stone-200">
+          <div className="absolute top-4 right-4 md:top-auto md:bottom-6 z-[1000] bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-lg border border-stone-200">
             <p className="text-xs font-semibold text-stone-700 mb-2">Markers</p>
             <div className="flex items-center gap-2 mb-1.5">
               <div
