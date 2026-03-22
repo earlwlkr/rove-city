@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import { Providers } from "@/components/Providers";
 
 export const metadata: Metadata = {
-  title: "Rove City – Explore the World",
-  description: "Discover and explore cities around the world with Rove City.",
+  title: "Rove — Location-Based Travel Journal",
+  description:
+    "Capture photos tied to places, share them in a global feed, and explore memories on an interactive map.",
 };
 
 export default function RootLayout({
@@ -14,7 +13,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className="antialiased">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
