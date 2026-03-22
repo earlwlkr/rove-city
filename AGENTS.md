@@ -5,3 +5,15 @@ When working on Convex code, **always read `convex/_generated/ai/guidelines.md` 
 
 Convex agent skills for common tasks can be installed by running `npx convex ai-files install`.
 <!-- convex-ai-end -->
+
+# Production Deployment
+
+## Convex Production
+- **Production URL**: `https://descriptive-panther-929.convex.cloud`
+- **Deployment ID**: `prod:descriptive-panther-929`
+- **Environment file**: `.env.production.local`
+
+## Commands
+- Deploy to production: `npx convex deploy -y`
+- Check production env vars: `npx convex env list --prod`
+- View production dashboard: `npx convex dashboard --prod`
