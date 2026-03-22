@@ -82,7 +82,7 @@ export default function ProfilePage() {
                 ) : (
                   <div className="flex items-center gap-3">
                     <h1 className="text-xl md:text-2xl font-bold text-stone-900 truncate">
-                      {user?.name ?? "Anonymous"}
+                      {user?.name ?? "Traveler"}
                     </h1>
                     <button
                       onClick={startEditing}
@@ -129,7 +129,7 @@ export default function ProfilePage() {
                 <PostCard
                   key={post._id}
                   {...post}
-                  userName={user?.name ?? "Anonymous"}
+                  userName={user?.name ?? "Traveler"}
                   featured={i === 0}
                 />
               ))}
