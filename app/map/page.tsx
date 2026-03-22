@@ -24,10 +24,8 @@ export default function MapPage() {
 
   return (
     <>
-      <div className="hidden md:block">
-        <NavBar />
-      </div>
-      <main className="h-screen md:pt-16">
+      <NavBar />
+      <main className="h-screen pb-16 md:pt-16 md:pb-0">
         <div className="h-full relative">
           {posts === undefined ? (
             <div className="flex items-center justify-center h-full">
@@ -39,19 +37,19 @@ export default function MapPage() {
 
           <div className="absolute top-4 right-4 md:top-auto md:bottom-6 z-[1000] bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-lg border border-stone-200">
             <p className="text-xs font-semibold text-stone-700 mb-2">Markers</p>
-            <div className="flex items-center gap-2 mb-1.5">
-              <div
-                className="w-3 h-3 rounded-full"
-                style={{ background: "var(--teal)" }}
-              />
-              <span className="text-xs text-stone-600">Your posts</span>
+            <div className="flex items-center gap-2.5 mb-2">
+              <div className="relative flex items-center justify-center w-3 h-3">
+                <div className="absolute inset-0 bg-teal-500 rounded-full animate-ping opacity-30"></div>
+                <div className="relative w-2 h-2 bg-teal-500 rounded-full ring-2 ring-teal-500/20"></div>
+              </div>
+              <span className="text-xs font-medium text-stone-600">Your posts</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div
-                className="w-3 h-3 rounded-full"
-                style={{ background: "var(--burnt-orange)" }}
-              />
-              <span className="text-xs text-stone-600">Others&apos; posts</span>
+            <div className="flex items-center gap-2.5">
+              <div className="relative flex items-center justify-center w-3 h-3">
+                <div className="absolute inset-0 bg-orange-600 rounded-full animate-ping opacity-30"></div>
+                <div className="relative w-2 h-2 bg-orange-600 rounded-full ring-2 ring-orange-600/20"></div>
+              </div>
+              <span className="text-xs font-medium text-stone-600">Others&apos; posts</span>
             </div>
           </div>
 

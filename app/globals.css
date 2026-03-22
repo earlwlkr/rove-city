@@ -54,56 +54,22 @@ body {
   background: var(--stone-100) !important;
 }
 
-/* Custom marker styles */
-.custom-marker {
-  background: none;
-  border: none;
-}
-
-.marker-pin {
-  width: 32px;
-  height: 32px;
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  border: 3px solid white;
-}
-
-.marker-pin.teal {
-  background: var(--teal);
-}
-
-.marker-pin.orange {
-  background: var(--burnt-orange);
-}
-
-.marker-pin .inner {
-  width: 14px;
-  height: 14px;
-  background: white;
-  border-radius: 50%;
-  transform: rotate(45deg);
-}
-
-/* Leaflet popup styles */
-.leaflet-popup-content-wrapper {
-  border-radius: 16px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+/* Premium popup styles */
+.premium-popup .leaflet-popup-content-wrapper {
+  background: transparent !important;
+  box-shadow: none !important;
   padding: 0 !important;
-  overflow: hidden;
+  border-radius: 0 !important;
 }
 
-.leaflet-popup-content {
+.premium-popup .leaflet-popup-content {
   margin: 0 !important;
   width: auto !important;
-  min-width: 240px;
+  min-width: 250px;
 }
 
-.leaflet-popup-tip {
-  box-shadow: none !important;
+.premium-popup .leaflet-popup-tip-container {
+  display: none !important;
 }
 
 /* Scrollbar */
