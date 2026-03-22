@@ -4,11 +4,11 @@ import { useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import Image from "next/image";
+
 
 interface MapPost {
   _id: string;
-  caption: string;
+  caption?: string;
   locationName: string;
   latitude: number;
   longitude: number;
@@ -73,15 +73,11 @@ export default function MapView({ posts }: { posts: MapPost[] }) {
           <Popup>
             <div className="w-60">
               {post.imageUrl && (
-                <div className="relative h-36 w-full">
-                  <Image
-                    src={post.imageUrl}
-                    alt={post.caption}
-                    fill
-                    className="object-cover rounded-t-lg"
-                    sizes="240px"
-                  />
-                </div>
+                <img
+                  src={post.imageUrl}
+                  alt={post.caption}
+                  className="h-36 w-full object-cover rounded-t-lg"
+                />
               )}
               <div className="p-3">
                 <p className="text-sm font-semibold text-stone-900 line-clamp-2 mb-1">

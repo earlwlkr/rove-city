@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { NavBar } from "@/components/NavBar";
 import { LocationSearch } from "@/components/LocationSearch";
 import { useIdentity } from "@/components/useIdentity";
-import Image from "next/image";
+
 
 export default function NewPostPage() {
   const { userId, isLoading } = useIdentity();
@@ -72,7 +72,7 @@ export default function NewPostPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file || !location || !caption.trim() || !userId) return;
+    if (!file || !location || !userId) return;
 
     setSubmitting(true);
     try {
@@ -87,7 +87,7 @@ export default function NewPostPage() {
 
       await createPost({
         userId,
-        caption: caption.trim(),
+        caption: caption.trim() || undefined,
         locationName: location.name,
         latitude: location.latitude,
         longitude: location.longitude,
@@ -137,11 +137,10 @@ export default function NewPostPage() {
                 >
                   {preview ? (
                     <div className="relative h-64 md:h-80">
-                      <Image
+                      <img
                         src={preview}
                         alt="Preview"
-                        fill
-                        className="object-cover"
+                        className="absolute inset-0 w-full h-full object-cover"
                       />
                       <div className="absolute inset-0 bg-black/0 hover:bg-black/30 transition-colors flex items-center justify-center">
                         <span className="text-white opacity-0 hover:opacity-100 font-medium text-sm">
@@ -220,7 +219,7 @@ export default function NewPostPage() {
               <button
                 type="submit"
                 disabled={
-                  !file || !location || !caption.trim() || submitting || !userId
+                  !file || !location || submitting || !userId
                 }
                 className="w-full py-3.5 rounded-xl text-sm font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
                 style={{ background: "var(--teal)" }}

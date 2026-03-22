@@ -25,23 +25,13 @@ export default function FeedPage() {
       <main className="min-h-screen pb-20 md:pt-20 md:pb-8">
         <div className="bg-white border-b border-stone-200">
           <div className="max-w-5xl mx-auto px-4 py-10 md:py-16">
-            <div className="flex items-start justify-between">
-              <div>
-                <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-stone-900">
-                  Global Feed
-                </h1>
-                <p className="text-stone-500 mt-2 text-base md:text-lg">
-                  Travel memories from around the world
-                </p>
-              </div>
-              <Link
-                href="/post/new"
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white transition-opacity hover:opacity-90 shrink-0"
-                style={{ background: "var(--burnt-orange)" }}
-              >
-                <span className="text-lg leading-none">+</span>
-                New Post
-              </Link>
+            <div>
+              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-stone-900">
+                Global Feed
+              </h1>
+              <p className="text-stone-500 mt-2 text-base md:text-lg">
+                Travel memories from around the world
+              </p>
             </div>
           </div>
         </div>

@@ -1,11 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { formatDistanceToNow } from "./utils";
 
 interface PostCardProps {
   _id: string;
-  caption: string;
+  caption?: string;
   locationName: string;
   latitude: number;
   longitude: number;
@@ -36,12 +35,10 @@ export function PostCard({
             featured ? "h-64 md:h-80" : "h-48"
           }`}
         >
-          <Image
+          <img
             src={imageUrl}
             alt={caption}
-            fill
-            className="object-cover"
-            sizes={featured ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 33vw"}
+            className="absolute inset-0 w-full h-full object-cover"
           />
         </div>
       )}
@@ -63,13 +60,15 @@ export function PostCard({
           </div>
         </div>
 
-        <p
-          className={`text-stone-700 leading-relaxed mb-3 ${
-            featured ? "text-base" : "text-sm"
-          }`}
-        >
-          {caption}
-        </p>
+        {caption && (
+          <p
+            className={`text-stone-700 leading-relaxed mb-3 ${
+              featured ? "text-base" : "text-sm"
+            }`}
+          >
+            {caption}
+          </p>
+        )}
 
         <div className="flex items-center gap-1.5 text-xs text-stone-400">
           <svg

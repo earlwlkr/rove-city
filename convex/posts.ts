@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import { paginationOptsValidator } from "convex/server";
 import { mutation, query } from "./_generated/server";
 
 export const generateUploadUrl = mutation({
@@ -10,7 +11,7 @@ export const generateUploadUrl = mutation({
 export const createPost = mutation({
   args: {
     userId: v.id("users"),
-    caption: v.string(),
+    caption: v.optional(v.string()),
     locationName: v.string(),
     latitude: v.number(),
     longitude: v.number(),
@@ -23,17 +24,14 @@ export const createPost = mutation({
 
 export const getFeed = query({
   args: {
-    limit: v.optional(v.number()),
-    cursor: v.optional(v.string()),
+    paginationOpts: paginationOptsValidator,
     userId: v.optional(v.id("users")),
   },
   handler: async (ctx, args) => {
-    const limit = args.limit ?? 20;
-
     const posts = await ctx.db
       .query("posts")
       .order("desc")
-      .paginate({ numItems: limit, cursor: args.cursor ?? null });
+      .paginate(args.paginationOpts);
 
     const enriched = await Promise.all(
       posts.page.map(async (post) => {

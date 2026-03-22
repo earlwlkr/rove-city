@@ -8,7 +8,7 @@ export default defineSchema({
 
   posts: defineTable({
     userId: v.id("users"),
-    caption: v.string(),
+    caption: v.optional(v.string()),
     locationName: v.string(),
     latitude: v.number(),
     longitude: v.number(),
