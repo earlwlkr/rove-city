@@ -35,13 +35,6 @@ export default function MapPage() {
             <MapView posts={posts} />
           )}
 
-          <div className="soft-card absolute left-4 top-20 z-[1000] px-4 py-3 sm:top-24 md:left-6 md:top-6">
-            <p className="section-kicker mb-2">Spatial view</p>
-            <h1 className="display-title text-[2rem] text-stone-900 md:text-[2.8rem]">
-              World Map
-            </h1>
-          </div>
-
           <div className="soft-card absolute right-4 top-20 z-[1000] px-4 py-3 sm:top-24 md:right-6 md:top-6 md:bottom-auto">
             <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.18em] text-stone-400">
               Markers
