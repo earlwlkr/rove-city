@@ -9,9 +9,9 @@ export function NavBar() {
   const primaryLinks = [
     { href: "/", label: "Feed" },
     { href: "/map", label: "Map" },
+    { href: "/profile", label: "Profile" },
   ];
   const secondaryLinks = [
-    { href: "/profile", label: "Profile" },
     { href: "/post/new", label: "New Post" },
   ];
 
