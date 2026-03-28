@@ -22,16 +22,17 @@ function clearStoredUserId() {
 }
 
 export function useIdentity() {
-  const [userId, setUserId] = useState<Id<"users"> | null>(null);
+  const [userId, setUserId] = useState<Id<"users"> | null>(() =>
+    getStoredUserId()
+  );
   const createUser = useMutation(api.users.create);
   const updateNameMutation = useMutation(api.users.updateDisplayName);
   const user = useQuery(api.users.getUser, userId ? { userId } : "skip");
 
   const ensureUser = useCallback(async () => {
-    const stored = getStoredUserId();
-    if (stored) {
-      setUserId(stored);
-      return stored;
+    const current = getStoredUserId();
+    if (current) {
+      return current;
     }
 
     if (!pendingUserCreation) {
@@ -51,20 +52,46 @@ export function useIdentity() {
   }, [createUser]);
 
   useEffect(() => {
-    ensureUser().catch((err) => {
-      console.error("Failed to initialize identity:", err);
-    });
-  }, [ensureUser]);
+    if (userId) return;
+
+    let cancelled = false;
+
+    ensureUser()
+      .then((id) => {
+        if (!cancelled) {
+          setUserId(id);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to initialize identity:", err);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userId, ensureUser]);
 
   // If stored ID points to a deleted user, create a new one
   useEffect(() => {
-    if (userId && user === null) {
+    if (!userId || user !== null) return;
+
+    let cancelled = false;
+
+    const recoverIdentity = async () => {
       clearStoredUserId();
-      setUserId(null);
-      ensureUser().catch((err) => {
-        console.error("Failed to recover identity:", err);
-      });
-    }
+      const id = await ensureUser();
+      if (!cancelled) {
+        setUserId(id);
+      }
+    };
+
+    recoverIdentity().catch((err) => {
+      console.error("Failed to recover identity:", err);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [userId, user, ensureUser]);
 
   const updateName = useCallback(
@@ -75,5 +102,10 @@ export function useIdentity() {
     [userId, updateNameMutation]
   );
 
-  return { userId, user, updateName, isLoading: userId === null || user === undefined };
+  return {
+    userId,
+    user,
+    updateName,
+    isLoading: userId === null || user === undefined,
+  };
 }

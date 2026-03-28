@@ -22,72 +22,67 @@ export default function FeedPage() {
   return (
     <>
       <NavBar />
-      <main className="min-h-screen pb-20 md:pt-20 md:pb-8">
-        <div className="bg-white border-b border-stone-200">
-          <div className="max-w-5xl mx-auto px-4 py-10 md:py-16">
+      <main className="min-h-screen pt-24 pb-12 sm:pt-28 sm:pb-10">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <section className="soft-panel px-6 py-7 md:px-10 md:py-10">
+            <p className="section-kicker mb-3">Curated memories</p>
             <div>
-              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-stone-900">
+              <h1 className="display-title text-[2.7rem] text-stone-900 md:text-[4rem]">
                 Global Feed
               </h1>
-              <p className="text-stone-500 mt-2 text-base md:text-lg">
-                Travel memories from around the world
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-500 md:text-base">
+                Travel memories from around the world, presented with a quieter
+                editorial rhythm.
               </p>
             </div>
-          </div>
-        </div>
+          </section>
 
-        <div className="max-w-5xl mx-auto px-4 py-8">
-          {posts === undefined && (
-            <div className="flex items-center justify-center py-20">
-              <div className="w-8 h-8 border-3 border-stone-200 border-t-teal-500 rounded-full animate-spin" />
-            </div>
-          )}
-
-          {posts && posts.length === 0 && (
-            <div className="text-center py-20">
-              <div className="text-6xl mb-4">📸</div>
-              <h2 className="text-xl font-bold text-stone-900 mb-2">
-                No posts yet
-              </h2>
-              <p className="text-stone-500 mb-6">
-                Be the first to share a travel memory!
-              </p>
-              <Link
-                href="/post/new"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white"
-                style={{ background: "var(--teal)" }}
-              >
-                Create your first post
-              </Link>
-            </div>
-          )}
-
-          {posts && posts.length > 0 && (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                {posts.map((post, i) => (
-                  <PostCard key={post._id} {...post} featured={i === 0} />
-                ))}
+          <div className="py-8">
+            {posts === undefined && (
+              <div className="soft-panel flex items-center justify-center py-20">
+                <div className="w-8 h-8 border-3 border-stone-200 border-t-teal-500 rounded-full animate-spin" />
               </div>
+            )}
 
-              {status === "CanLoadMore" && (
-                <div className="flex justify-center mt-10">
-                  <button
-                    onClick={() => loadMore(12)}
-                    className="px-6 py-3 rounded-full text-sm font-semibold text-stone-700 border border-stone-300 hover:bg-stone-100 transition-colors"
-                  >
-                    Load more
-                  </button>
-                </div>
-              )}
+            {posts && posts.length === 0 && (
+              <div className="soft-panel px-6 py-16 text-center">
+                <p className="section-kicker mb-3">First story</p>
+                <h2 className="display-title mb-3 text-[2.2rem] text-stone-900">
+                  No posts yet
+                </h2>
+                <p className="mx-auto mb-6 max-w-md text-sm leading-6 text-stone-500">
+                  Be the first to share a travel memory!
+                </p>
+                <Link href="/post/new" className="primary-button">
+                  Create your first post
+                </Link>
+              </div>
+            )}
 
-              {status === "LoadingMore" && (
-                <div className="flex justify-center mt-10">
-                  <div className="w-6 h-6 border-2 border-stone-200 border-t-teal-500 rounded-full animate-spin" />
+            {posts && posts.length > 0 && (
+              <>
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+                  {posts.map((post, i) => (
+                    <PostCard key={post._id} {...post} featured={i === 0} />
+                  ))}
                 </div>
-              )}
-            </>
-          )}
+
+                {status === "CanLoadMore" && (
+                  <div className="mt-10 flex justify-center">
+                    <button onClick={() => loadMore(12)} className="soft-button px-6">
+                      Load more
+                    </button>
+                  </div>
+                )}
+
+                {status === "LoadingMore" && (
+                  <div className="mt-10 flex justify-center">
+                    <div className="w-6 h-6 border-2 border-stone-200 border-t-teal-500 rounded-full animate-spin" />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </main>
     </>

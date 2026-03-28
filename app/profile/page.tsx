@@ -39,13 +39,12 @@ export default function ProfilePage() {
   return (
     <>
       <NavBar />
-      <main className="min-h-screen pb-20 md:pt-20">
-        <div className="bg-white border-b border-stone-200">
-          <div className="max-w-5xl mx-auto px-4 py-10 md:py-16">
+      <main className="min-h-screen pt-24 pb-12 sm:pt-28">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <section className="soft-panel px-6 py-7 md:px-10 md:py-10">
             <div className="flex items-center gap-5">
               <div
-                className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white text-2xl md:text-3xl font-bold shrink-0"
-                style={{ background: "var(--teal)" }}
+                className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-stone-200 bg-stone-100 text-2xl font-semibold text-stone-700 md:h-20 md:w-20 md:text-3xl"
               >
                 {(user?.name ?? "A").charAt(0).toUpperCase()}
               </div>
@@ -57,7 +56,7 @@ export default function ProfilePage() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Your display name"
-                      className="text-xl md:text-2xl font-bold text-stone-900 bg-transparent border-b-2 border-teal-500 outline-none pb-1 flex-1 min-w-0"
+                      className="min-w-0 flex-1 border-b border-stone-300 bg-transparent pb-1 text-xl font-medium text-stone-900 outline-none md:text-2xl"
                       autoFocus
                       onKeyDown={(e) => {
                         if (e.key === "Enter") handleSave();
@@ -67,74 +66,74 @@ export default function ProfilePage() {
                     <button
                       onClick={handleSave}
                       disabled={saving || !name.trim()}
-                      className="px-4 py-1.5 rounded-lg text-sm font-semibold text-white disabled:opacity-50"
-                      style={{ background: "var(--teal)" }}
+                      className="primary-button px-4 py-2 text-xs disabled:opacity-50"
                     >
                       {saving ? "..." : "Save"}
                     </button>
                     <button
                       onClick={() => setEditing(false)}
-                      className="px-4 py-1.5 rounded-lg text-sm font-semibold text-stone-500 hover:bg-stone-100"
+                      className="soft-button px-4 py-2 text-xs"
                     >
                       Cancel
                     </button>
                   </div>
                 ) : (
                   <div className="flex items-center gap-3">
-                    <h1 className="text-xl md:text-2xl font-bold text-stone-900 truncate">
-                      {user?.name ?? "Traveler"}
-                    </h1>
+                    <div>
+                      <p className="section-kicker mb-2">Your profile</p>
+                      <h1 className="truncate text-2xl font-medium text-stone-900 md:text-3xl">
+                        {user?.name ?? "Traveler"}
+                      </h1>
+                    </div>
                     <button
                       onClick={startEditing}
-                      className="text-xs px-3 py-1 rounded-full border border-stone-300 text-stone-500 hover:text-stone-700 hover:border-stone-400 transition-colors shrink-0"
+                      className="soft-button shrink-0 px-3 py-1.5 text-xs"
                     >
                       Edit name
                     </button>
                   </div>
                 )}
-                <p className="text-stone-500 text-sm mt-1">
-                  {posts?.length ?? 0} travel{" "}
-                  {(posts?.length ?? 0) === 1 ? "memory" : "memories"}
-                </p>
+                {!editing && (
+                  <p className="mt-2 text-sm text-stone-500">
+                    {posts?.length ?? 0} travel{" "}
+                    {(posts?.length ?? 0) === 1 ? "memory" : "memories"}
+                  </p>
+                )}
               </div>
             </div>
-          </div>
-        </div>
+          </section>
 
-        <div className="max-w-5xl mx-auto px-4 py-8">
-          {isLoading || posts === undefined ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="w-8 h-8 border-3 border-stone-200 border-t-teal-500 rounded-full animate-spin" />
-            </div>
-          ) : posts.length === 0 ? (
-            <div className="text-center py-20">
-              <div className="text-6xl mb-4">📷</div>
-              <h2 className="text-xl font-bold text-stone-900 mb-2">
-                No memories yet
-              </h2>
-              <p className="text-stone-500 mb-6">
-                Start capturing your travel moments
-              </p>
-              <Link
-                href="/post/new"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white"
-                style={{ background: "var(--teal)" }}
-              >
-                Create your first post
-              </Link>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {posts.map((post, i) => (
-                <PostCard
-                  key={post._id}
-                  {...post}
-                  userName={user?.name ?? "Traveler"}
-                  featured={i === 0}
-                />
-              ))}
-            </div>
-          )}
+          <div className="py-8">
+            {isLoading || posts === undefined ? (
+              <div className="soft-panel flex items-center justify-center py-20">
+                <div className="w-8 h-8 border-3 border-stone-200 border-t-teal-500 rounded-full animate-spin" />
+              </div>
+            ) : posts.length === 0 ? (
+              <div className="soft-panel px-6 py-16 text-center">
+                <p className="section-kicker mb-3">Quiet start</p>
+                <h2 className="display-title mb-3 text-[2.2rem] text-stone-900">
+                  No memories yet
+                </h2>
+                <p className="mx-auto mb-6 max-w-md text-sm leading-6 text-stone-500">
+                  Start capturing your travel moments.
+                </p>
+                <Link href="/post/new" className="primary-button">
+                  Create your first post
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+                {posts.map((post, i) => (
+                  <PostCard
+                    key={post._id}
+                    {...post}
+                    userName={user?.name ?? "Traveler"}
+                    featured={i === 0}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </main>
     </>

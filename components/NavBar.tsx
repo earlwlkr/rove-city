@@ -6,60 +6,60 @@ import { usePathname } from "next/navigation";
 export function NavBar() {
   const pathname = usePathname();
 
-  const links = [
-    { href: "/", label: "Feed", icon: "📰" },
-    { href: "/map", label: "Map", icon: "🗺️" },
-    { href: "/profile", label: "Profile", icon: "👤" },
+  const primaryLinks = [
+    { href: "/", label: "Feed" },
+    { href: "/map", label: "Map" },
+  ];
+  const secondaryLinks = [
+    { href: "/profile", label: "Profile" },
+    { href: "/post/new", label: "New Post" },
   ];
 
-  return (
-    <nav className="fixed bottom-0 inset-x-0 z-50 bg-white/90 backdrop-blur-lg border-t border-stone-200 md:top-0 md:bottom-auto">
-      <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link
-          href="/"
-          className="hidden md:flex items-center gap-2 text-lg font-bold tracking-tight text-stone-900"
-        >
-          <span
-            className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold"
-            style={{ background: "var(--teal)" }}
-          >
-            R
-          </span>
-          Rove
-        </Link>
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-        <div className="flex items-center gap-1 md:gap-2 mx-auto md:mx-0">
-          {links.map((link) => {
-            const isActive =
-              link.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(link.href);
+  return (
+    <nav className="fixed inset-x-0 top-0 z-50">
+      <div className="mx-auto flex max-w-[1320px] items-center justify-between px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8">
+        <div className="flex items-center gap-0.5 rounded-full border border-stone-200/90 bg-[#f3f3f2] p-[3px] shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+          {primaryLinks.map((link) => {
+            const active = isActive(link.href);
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium transition-colors ${
-                  isActive
-                    ? "text-white"
-                    : "text-stone-500 hover:text-stone-900 hover:bg-stone-100"
+                aria-current={active ? "page" : undefined}
+                className={`rounded-full px-4 py-2 text-[14px] leading-none tracking-[-0.02em] transition-all sm:px-8 sm:py-2.5 ${
+                  active
+                    ? "bg-white font-medium text-stone-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
+                    : "font-normal text-stone-400 hover:text-stone-700"
                 }`}
-                style={isActive ? { background: "var(--teal)" } : undefined}
               >
-                <span className="text-base">{link.icon}</span>
-                <span className="hidden sm:inline">{link.label}</span>
+                {link.label}
               </Link>
             );
           })}
         </div>
 
-        <Link
-          href="/post/new"
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white transition-colors hover:opacity-90"
-          style={{ background: "var(--burnt-orange)" }}
-        >
-          <span className="text-lg leading-none">+</span>
-          <span className="hidden sm:inline">New Post</span>
-        </Link>
+        <div className="flex items-center gap-3 sm:gap-4">
+          {secondaryLinks.map((link) => {
+            const active = isActive(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                className={`text-[14px] leading-none tracking-[-0.02em] transition-colors ${
+                  active
+                    ? "font-medium text-stone-900"
+                    : "font-medium text-stone-900/92 hover:text-stone-700"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </nav>
   );

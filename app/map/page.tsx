@@ -25,42 +25,51 @@ export default function MapPage() {
   return (
     <>
       <NavBar />
-      <main className="h-screen pb-16 md:pt-16 md:pb-0">
-        <div className="h-full relative">
+      <main className="h-screen">
+        <div className="relative h-full w-full overflow-hidden">
           {posts === undefined ? (
-            <div className="flex items-center justify-center h-full">
+            <div className="flex h-full items-center justify-center">
               <div className="w-8 h-8 border-3 border-stone-200 border-t-teal-500 rounded-full animate-spin" />
             </div>
           ) : (
             <MapView posts={posts} />
           )}
 
-          <div className="absolute top-4 right-4 md:top-auto md:bottom-6 z-[1000] bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-lg border border-stone-200">
-            <p className="text-xs font-semibold text-stone-700 mb-2">Markers</p>
-            <div className="flex items-center gap-2.5 mb-2">
-              <div className="relative flex items-center justify-center w-3 h-3">
-                <div className="absolute inset-0 bg-teal-500 rounded-full animate-ping opacity-30"></div>
-                <div className="relative w-2 h-2 bg-teal-500 rounded-full ring-2 ring-teal-500/20"></div>
+          <div className="soft-card absolute left-4 top-20 z-[1000] px-4 py-3 sm:top-24 md:left-6 md:top-6">
+            <p className="section-kicker mb-2">Spatial view</p>
+            <h1 className="display-title text-[2rem] text-stone-900 md:text-[2.8rem]">
+              World Map
+            </h1>
+          </div>
+
+          <div className="soft-card absolute right-4 top-20 z-[1000] px-4 py-3 sm:top-24 md:right-6 md:top-6 md:bottom-auto">
+            <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.18em] text-stone-400">
+              Markers
+            </p>
+            <div className="mb-2 flex items-center gap-2.5">
+              <div className="relative flex h-3 w-3 items-center justify-center">
+                <div className="absolute inset-0 rounded-full bg-teal-500 opacity-30 animate-ping"></div>
+                <div className="relative h-2 w-2 rounded-full bg-teal-500 ring-2 ring-teal-500/20"></div>
               </div>
               <span className="text-xs font-medium text-stone-600">Your posts</span>
             </div>
             <div className="flex items-center gap-2.5">
-              <div className="relative flex items-center justify-center w-3 h-3">
-                <div className="absolute inset-0 bg-orange-600 rounded-full animate-ping opacity-30"></div>
-                <div className="relative w-2 h-2 bg-orange-600 rounded-full ring-2 ring-orange-600/20"></div>
+              <div className="relative flex h-3 w-3 items-center justify-center">
+                <div className="absolute inset-0 rounded-full bg-orange-600 opacity-30 animate-ping"></div>
+                <div className="relative h-2 w-2 rounded-full bg-orange-600 ring-2 ring-orange-600/20"></div>
               </div>
               <span className="text-xs font-medium text-stone-600">Others&apos; posts</span>
             </div>
           </div>
 
           {posts && posts.length === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center bg-stone-50/80 z-[999]">
-              <div className="text-center px-4">
-                <div className="text-6xl mb-4">🗺️</div>
-                <h2 className="text-xl font-bold text-stone-900 mb-2">
+            <div className="absolute inset-0 z-[999] flex items-center justify-center bg-stone-50/70 backdrop-blur-sm">
+              <div className="soft-card px-8 py-10 text-center">
+                <p className="section-kicker mb-3">Waiting for stories</p>
+                <h2 className="display-title mb-3 text-[2.2rem] text-stone-900">
                   Map is empty
                 </h2>
-                <p className="text-stone-500">
+                <p className="max-w-sm text-sm leading-6 text-stone-500">
                   No travel memories yet. Start posting to populate the map!
                 </p>
               </div>

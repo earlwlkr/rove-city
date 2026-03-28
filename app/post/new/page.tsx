@@ -119,144 +119,145 @@ export default function NewPostPage() {
   return (
     <>
       <NavBar />
-      <main className="min-h-screen pb-20 md:pt-20">
-        <div className="max-w-2xl mx-auto px-4 py-8">
-          <h1 className="text-2xl font-bold text-stone-900 mb-1">
-            New Travel Memory
-          </h1>
-          <p className="text-stone-500 mb-8">
-            Capture a moment tied to a place
-          </p>
+      <main className="min-h-screen pt-24 pb-12 sm:pt-28">
+        <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+          <section className="soft-panel px-6 py-7 md:px-10 md:py-10">
+            <p className="section-kicker mb-3">Compose a memory</p>
+            <h1 className="display-title mb-2 text-[2.5rem] text-stone-900 md:text-[3.6rem]">
+              New Travel Memory
+            </h1>
+            <p className="mb-8 max-w-xl text-sm leading-6 text-stone-500">
+              Capture a moment tied to a place, with a lighter and more
+              editorial presentation.
+            </p>
 
-          {isLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="w-8 h-8 border-3 border-stone-200 border-t-teal-500 rounded-full animate-spin" />
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Photo upload */}
-              <div>
-                <label className="block text-sm font-semibold text-stone-700 mb-2">
-                  Photo
-                </label>
-                <div
-                  onDrop={handleDrop}
-                  onDragOver={(e) => e.preventDefault()}
-                  onClick={() => fileInputRef.current?.click()}
-                  className={`relative border-2 border-dashed rounded-2xl cursor-pointer transition-colors overflow-hidden ${
-                    preview
-                      ? "border-stone-200"
-                      : "border-stone-300 hover:border-teal-400 hover:bg-teal-50/30"
-                  }`}
-                >
-                  {preview ? (
-                    <div className="relative h-64 md:h-80">
-                      <img
-                        src={preview}
-                        alt="Preview"
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-black/0 hover:bg-black/30 transition-colors flex items-center justify-center">
-                        <span className="text-white opacity-0 hover:opacity-100 font-medium text-sm">
-                          Change photo
-                        </span>
+            {isLoading ? (
+              <div className="flex items-center justify-center py-20">
+                <div className="w-8 h-8 border-3 border-stone-200 border-t-teal-500 rounded-full animate-spin" />
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Photo upload */}
+                <div>
+                  <label className="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-stone-400">
+                    Photo
+                  </label>
+                  <div
+                    onDrop={handleDrop}
+                    onDragOver={(e) => e.preventDefault()}
+                    onClick={() => fileInputRef.current?.click()}
+                    className={`relative cursor-pointer overflow-hidden rounded-[28px] border border-dashed transition-colors ${
+                      preview
+                        ? "border-stone-200 bg-white/70"
+                        : "border-stone-300 bg-white/55 hover:border-stone-400 hover:bg-white/75"
+                    }`}
+                  >
+                    {preview ? (
+                      <div className="relative h-64 md:h-80">
+                        <img
+                          src={preview}
+                          alt="Preview"
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors hover:bg-black/20">
+                          <span className="text-sm font-medium text-white opacity-0 hover:opacity-100">
+                            Change photo
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center py-16 px-4">
-                      <div className="w-16 h-16 rounded-full bg-stone-100 flex items-center justify-center mb-4">
-                        <svg
-                          className="w-8 h-8 text-stone-400"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={1.5}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"
-                          />
-                        </svg>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center px-4 py-16">
+                        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-stone-200 bg-white/85">
+                          <svg
+                            className="h-7 w-7 text-stone-400"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={1.5}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"
+                            />
+                          </svg>
+                        </div>
+                        <p className="mb-1 text-sm font-medium text-stone-700">
+                          Drop a photo here or click to browse
+                        </p>
+                        <p className="text-xs text-stone-400">
+                          Images are optimized before upload
+                        </p>
                       </div>
-                      <p className="text-sm font-medium text-stone-700 mb-1">
-                        Drop a photo here or click to browse
-                      </p>
-                      <p className="text-xs text-stone-400">
-                        Images are optimized before upload
-                      </p>
-                    </div>
-                  )}
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) =>
-                      handleFileChange(e.target.files?.[0] ?? null)
-                    }
-                    className="hidden"
+                    )}
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) =>
+                        handleFileChange(e.target.files?.[0] ?? null)
+                      }
+                      className="hidden"
+                    />
+                  </div>
+                </div>
+
+                {/* Caption */}
+                <div>
+                  <label className="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-stone-400">
+                    Caption
+                  </label>
+                  <textarea
+                    value={caption}
+                    onChange={(e) => setCaption(e.target.value)}
+                    placeholder="What's the story behind this moment?"
+                    rows={3}
+                    className="soft-input resize-none"
                   />
                 </div>
-              </div>
 
-              {/* Caption */}
-              <div>
-                <label className="block text-sm font-semibold text-stone-700 mb-2">
-                  Caption
-                </label>
-                <textarea
-                  value={caption}
-                  onChange={(e) => setCaption(e.target.value)}
-                  placeholder="What's the story behind this moment?"
-                  rows={3}
-                  className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors resize-none"
-                />
-              </div>
+                {/* Location */}
+                <div>
+                  <label className="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-stone-400">
+                    Location
+                  </label>
+                  <LocationSearch
+                    onSelect={setLocation}
+                    selectedName={location?.name}
+                  />
+                </div>
 
-              {/* Location */}
-              <div>
-                <label className="block text-sm font-semibold text-stone-700 mb-2">
-                  Location
-                </label>
-                <LocationSearch
-                  onSelect={setLocation}
-                  selectedName={location?.name}
-                />
-              </div>
-
-              {/* AI tagging status (visible while tagging is in progress) */}
-              {aiStatus === "tagging" && (
-                <p className="text-xs text-teal-600 flex items-center gap-1.5">
-                  <span className="inline-block w-3 h-3 border-2 border-teal-300 border-t-teal-600 rounded-full animate-spin" />
-                  AI is tagging your photo in the background…
-                </p>
-              )}
-
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={
-                  !file || !location || submitting || !userId
-                }
-                className="w-full py-3.5 rounded-xl text-sm font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
-                style={{ background: "var(--teal)" }}
-              >
-                {submitting ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Publishing...
-                  </span>
-                ) : (
-                  "Publish Memory"
+                {/* AI tagging status (visible while tagging is in progress) */}
+                {aiStatus === "tagging" && (
+                  <p className="flex items-center gap-1.5 text-xs text-teal-700">
+                    <span className="inline-block w-3 h-3 border-2 border-teal-300 border-t-teal-600 rounded-full animate-spin" />
+                    AI is tagging your photo in the background…
+                  </p>
                 )}
-              </button>
-            </form>
-          )}
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  disabled={!file || !location || submitting || !userId}
+                  className="primary-button w-full rounded-2xl py-3.5 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  {submitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Publishing...
+                    </span>
+                  ) : (
+                    "Publish Memory"
+                  )}
+                </button>
+              </form>
+            )}
+          </section>
         </div>
       </main>
     </>

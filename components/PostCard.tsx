@@ -25,7 +25,7 @@ export function PostCard({
 }: PostCardProps) {
   return (
     <article
-      className={`bg-white rounded-2xl overflow-hidden border border-stone-200 hover:shadow-lg transition-shadow duration-300 ${
+      className={`soft-card overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(28,25,23,0.08)] ${
         featured ? "md:col-span-2 md:row-span-2" : ""
       }`}
     >
@@ -40,21 +40,21 @@ export function PostCard({
             alt={caption}
             className="absolute inset-0 w-full h-full object-cover"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-950/10 via-transparent to-transparent" />
         </div>
       )}
       <div className="p-4 md:p-5">
-        <div className="flex items-center gap-2 mb-3">
+        <div className="mb-3 flex items-center gap-2.5">
           <div
-            className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
-            style={{ background: "var(--teal)" }}
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-stone-200 bg-stone-100 text-[11px] font-semibold text-stone-700"
           >
             {userName.charAt(0).toUpperCase()}
           </div>
           <div className="min-w-0">
-            <div className="text-sm font-semibold text-stone-900 truncate">
+            <div className="truncate text-sm font-medium text-stone-900">
               {userName}
             </div>
-            <div className="text-xs text-stone-400">
+            <div className="text-[11px] text-stone-400">
               {formatDistanceToNow(_creationTime)}
             </div>
           </div>
@@ -62,15 +62,15 @@ export function PostCard({
 
         {caption && (
           <div
-            className={`text-stone-700 leading-relaxed mb-3 ${
-              featured ? "text-base" : "text-sm"
+            className={`mb-3 leading-relaxed text-stone-700 ${
+              featured ? "text-[15px]" : "text-sm"
             }`}
           >
             {caption}
           </div>
         )}
 
-        <div className="flex items-center gap-1.5 text-xs text-stone-400">
+        <div className="flex items-center gap-1.5 text-[11px] text-stone-400">
           <svg
             className="w-3.5 h-3.5 shrink-0"
             fill="none"

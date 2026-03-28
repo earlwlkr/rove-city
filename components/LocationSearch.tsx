@@ -107,7 +107,7 @@ export function LocationSearch({ onSelect, selectedName }: LocationSearchProps) 
             }}
             onFocus={() => setIsOpen(true)}
             placeholder="Search for a place..."
-            className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
+            className="soft-input pr-10"
           />
           {isLoading && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -118,11 +118,11 @@ export function LocationSearch({ onSelect, selectedName }: LocationSearchProps) 
         <button
           type="button"
           onClick={detectLocation}
-          className="px-4 py-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:bg-stone-50 transition-colors shrink-0"
+          className="soft-button shrink-0 px-3.5"
           title="Use my location"
         >
           <svg
-            className="w-5 h-5"
+            className="h-[18px] w-[18px]"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -143,7 +143,7 @@ export function LocationSearch({ onSelect, selectedName }: LocationSearchProps) 
       </div>
 
       {isOpen && results.length > 0 && (
-        <div className="absolute z-20 w-full mt-1 bg-white rounded-xl border border-stone-200 shadow-lg overflow-hidden">
+        <div className="soft-card absolute z-20 mt-2 w-full overflow-hidden">
           {results.map((r) => (
             <button
               key={r.place_id}
@@ -157,7 +157,7 @@ export function LocationSearch({ onSelect, selectedName }: LocationSearchProps) 
                 setQuery(r.display_name);
                 setIsOpen(false);
               }}
-              className="w-full px-4 py-3 text-left text-sm text-stone-700 hover:bg-stone-50 transition-colors flex items-start gap-2"
+              className="flex w-full items-start gap-2 px-4 py-3 text-left text-sm text-stone-700 transition-colors hover:bg-stone-50/80"
             >
               <svg
                 className="w-4 h-4 mt-0.5 text-stone-400 shrink-0"
