@@ -20,7 +20,7 @@ export function NavBar() {
 
   return (
     <nav className="fixed inset-x-0 top-0 z-50">
-      <div className="mx-auto flex max-w-[1320px] items-center justify-between px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8">
+      <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 pt-4 sm:px-6 sm:pt-6">
         <div className="flex items-center gap-0.5 rounded-full border border-stone-200/90 bg-[#f3f3f2] p-[3px] shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
           {primaryLinks.map((link) => {
             const active = isActive(link.href);
