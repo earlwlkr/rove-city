@@ -35,26 +35,6 @@ export default function MapPage() {
             <MapView posts={posts} />
           )}
 
-          <div className="soft-card absolute right-4 top-20 z-[1000] px-4 py-3 sm:top-24 md:right-6 md:top-6 md:bottom-auto">
-            <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.18em] text-stone-400">
-              Markers
-            </p>
-            <div className="mb-2 flex items-center gap-2.5">
-              <div className="relative flex h-3 w-3 items-center justify-center">
-                <div className="absolute inset-0 rounded-full bg-teal-500 opacity-30 animate-ping"></div>
-                <div className="relative h-2 w-2 rounded-full bg-teal-500 ring-2 ring-teal-500/20"></div>
-              </div>
-              <span className="text-xs font-medium text-stone-600">Your posts</span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <div className="relative flex h-3 w-3 items-center justify-center">
-                <div className="absolute inset-0 rounded-full bg-orange-600 opacity-30 animate-ping"></div>
-                <div className="relative h-2 w-2 rounded-full bg-orange-600 ring-2 ring-orange-600/20"></div>
-              </div>
-              <span className="text-xs font-medium text-stone-600">Others&apos; posts</span>
-            </div>
-          </div>
-
           {posts && posts.length === 0 && (
             <div className="absolute inset-0 z-[999] flex items-center justify-center bg-stone-50/70 backdrop-blur-sm">
               <div className="soft-card px-8 py-10 text-center">
