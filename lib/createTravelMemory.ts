@@ -1,3 +1,5 @@
+import type { Id } from "@/convex/_generated/dataModel";
+
 export type ImageSource =
   | { kind: "file"; file: File }
   | { kind: "url"; url: string };
@@ -9,7 +11,7 @@ export interface TravelMemoryLocation {
 }
 
 export interface CreateTravelMemoryArgs {
-  userId: string;
+  userId: Id<"users">;
   caption?: string;
   location: TravelMemoryLocation;
   imageSource: ImageSource;
@@ -18,13 +20,13 @@ export interface CreateTravelMemoryArgs {
 export interface CreateTravelMemoryDependencies {
   generateUploadUrl: () => Promise<string>;
   createPost: (args: {
-    userId: string;
+    userId: Id<"users">;
     caption?: string;
     locationName: string;
     latitude: number;
     longitude: number;
-    storageId: string;
-  }) => Promise<string>;
+    storageId: Id<"_storage">;
+  }) => Promise<Id<"posts">>;
 }
 
 async function resizeFile(file: File, maxWidth = 1600): Promise<Blob> {
@@ -76,7 +78,7 @@ async function resolveImageBlob(source: ImageSource): Promise<Blob> {
 export async function createTravelMemory(
   deps: CreateTravelMemoryDependencies,
   args: CreateTravelMemoryArgs,
-): Promise<{ postId: string; storageId: string }> {
+): Promise<{ postId: Id<"posts">; storageId: Id<"_storage"> }> {
   const blob = await resolveImageBlob(args.imageSource);
   const uploadUrl = await deps.generateUploadUrl();
 
@@ -97,14 +99,15 @@ export async function createTravelMemory(
     throw new Error("Image upload did not return a storageId");
   }
 
+  const storageId = uploadResult.storageId as Id<"_storage">;
   const postId = await deps.createPost({
     userId: args.userId,
     caption: args.caption?.trim() || undefined,
     locationName: args.location.name,
     latitude: args.location.latitude,
     longitude: args.location.longitude,
-    storageId: uploadResult.storageId,
+    storageId,
   });
 
-  return { postId, storageId: uploadResult.storageId };
+  return { postId, storageId };
 }
