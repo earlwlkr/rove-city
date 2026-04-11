@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ConvexHttpClient } from "convex/browser";
+import type { Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
 import { createTravelMemory } from "@/lib/createTravelMemory";
 
@@ -38,6 +39,7 @@ export async function POST(request: Request) {
     }
 
     const convex = new ConvexHttpClient(convexUrl);
+    const typedUserId = userId as Id<"users">;
 
     const { postId, storageId } = await createTravelMemory(
       {
@@ -45,7 +47,7 @@ export async function POST(request: Request) {
         createPost: (args) => convex.mutation(api.posts.createPost, args),
       },
       {
-        userId,
+        userId: typedUserId,
         caption,
         location: { name: locationName, latitude, longitude },
         imageSource: { kind: "url", url: imageUrl },
