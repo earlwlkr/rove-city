@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useMutation, useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useRouter } from "next/navigation";
 import { NavBar } from "@/components/NavBar";
 import { LocationSearch } from "@/components/LocationSearch";
 import { useIdentity } from "@/components/useIdentity";
+import { createTravelMemory } from "@/lib/createTravelMemory";
 
 export default function NewPostPage() {
   const { userId, isLoading } = useIdentity();
@@ -21,18 +22,51 @@ export default function NewPostPage() {
     latitude: number;
     longitude: number;
   } | null>(null);
+  const [imageUrl, setImageUrl] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [aiStatus, setAiStatus] = useState<"idle" | "tagging" | "done" | "error">("idle");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const objectUrlRef = useRef<string | null>(null);
 
-  const handleFileChange = useCallback((f: File | null) => {
-    if (!f) return;
-    setFile(f);
-    const url = URL.createObjectURL(f);
-    setPreview(url);
+  useEffect(() => {
+    return () => {
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+      }
+    };
   }, []);
+
+  const clearObjectUrl = useCallback(() => {
+    if (objectUrlRef.current) {
+      URL.revokeObjectURL(objectUrlRef.current);
+      objectUrlRef.current = null;
+    }
+  }, []);
+
+  const handleFileChange = useCallback(
+    (f: File | null) => {
+      if (!f) return;
+      clearObjectUrl();
+      setFile(f);
+      setImageUrl("");
+      const url = URL.createObjectURL(f);
+      objectUrlRef.current = url;
+      setPreview(url);
+    },
+    [clearObjectUrl],
+  );
+
+  const handleUrlChange = useCallback(
+    (value: string) => {
+      clearObjectUrl();
+      setFile(null);
+      setImageUrl(value);
+      setPreview(value.trim() || null);
+    },
+    [clearObjectUrl],
+  );
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -40,64 +74,36 @@ export default function NewPostPage() {
       const f = e.dataTransfer.files[0];
       if (f && f.type.startsWith("image/")) handleFileChange(f);
     },
-    [handleFileChange]
-  );
-
-  const resizeImage = useCallback(
-    (file: File, maxWidth = 1600): Promise<Blob> => {
-      return new Promise((resolve, reject) => {
-        const img = new window.Image();
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          const scale = Math.min(1, maxWidth / img.width);
-          canvas.width = img.width * scale;
-          canvas.height = img.height * scale;
-          const ctx = canvas.getContext("2d");
-          if (!ctx) return reject(new Error("No canvas context"));
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          canvas.toBlob(
-            (blob) => {
-              if (blob) resolve(blob);
-              else reject(new Error("Failed to create blob"));
-            },
-            "image/jpeg",
-            0.85
-          );
-        };
-        img.onerror = reject;
-        img.src = URL.createObjectURL(file);
-      });
-    },
-    []
+    [handleFileChange],
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file || !location || !userId) return;
+    if (!location || !userId) return;
+
+    const imageSource = file
+      ? { kind: "file", file } as const
+      : imageUrl.trim()
+        ? { kind: "url", url: imageUrl.trim() } as const
+        : null;
+
+    if (!imageSource) return;
 
     setSubmitting(true);
     try {
-      // 1. Resize and upload the image
-      const resized = await resizeImage(file);
-      const uploadUrl = await generateUploadUrl();
-      const result = await fetch(uploadUrl, {
-        method: "POST",
-        headers: { "Content-Type": resized.type },
-        body: resized,
-      });
-      const { storageId } = await result.json();
+      const { postId, storageId } = await createTravelMemory(
+        {
+          generateUploadUrl: () => generateUploadUrl(),
+          createPost: (args) => createPost(args),
+        },
+        {
+          userId,
+          caption: caption.trim() || undefined,
+          location,
+          imageSource,
+        },
+      );
 
-      // 2. Create the post record
-      const postId = await createPost({
-        userId,
-        caption: caption.trim() || undefined,
-        locationName: location.name,
-        latitude: location.latitude,
-        longitude: location.longitude,
-        storageId,
-      });
-
-      // 3. Fire-and-forget AI tagging (non-blocking)
       if (postId) {
         setAiStatus("tagging");
         tagPhoto({ postId, storageId })
@@ -115,6 +121,8 @@ export default function NewPostPage() {
       setSubmitting(false);
     }
   };
+
+  const previewSrc = preview;
 
   return (
     <>
@@ -137,7 +145,6 @@ export default function NewPostPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Photo upload */}
                 <div>
                   <label className="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-stone-400">
                     Photo
@@ -147,15 +154,15 @@ export default function NewPostPage() {
                     onDragOver={(e) => e.preventDefault()}
                     onClick={() => fileInputRef.current?.click()}
                     className={`relative cursor-pointer overflow-hidden rounded-[28px] border border-dashed transition-colors ${
-                      preview
+                      previewSrc
                         ? "border-stone-200 bg-white/70"
                         : "border-stone-300 bg-white/55 hover:border-stone-400 hover:bg-white/75"
                     }`}
                   >
-                    {preview ? (
+                    {previewSrc ? (
                       <div className="relative h-64 md:h-80">
                         <img
-                          src={preview}
+                          src={previewSrc}
                           alt="Preview"
                           className="absolute inset-0 w-full h-full object-cover"
                         />
@@ -199,15 +206,28 @@ export default function NewPostPage() {
                       ref={fileInputRef}
                       type="file"
                       accept="image/*"
-                      onChange={(e) =>
-                        handleFileChange(e.target.files?.[0] ?? null)
-                      }
+                      onChange={(e) => handleFileChange(e.target.files?.[0] ?? null)}
                       className="hidden"
                     />
                   </div>
                 </div>
 
-                {/* Caption */}
+                <div>
+                  <label className="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-stone-400">
+                    Image URL
+                  </label>
+                  <input
+                    type="url"
+                    value={imageUrl}
+                    onChange={(e) => handleUrlChange(e.target.value)}
+                    placeholder="https://example.com/photo.jpg"
+                    className="soft-input"
+                  />
+                  <p className="mt-2 text-xs text-stone-400">
+                    Optional alternative to file upload. Pasting a URL will use that image instead.
+                  </p>
+                </div>
+
                 <div>
                   <label className="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-stone-400">
                     Caption
@@ -221,18 +241,13 @@ export default function NewPostPage() {
                   />
                 </div>
 
-                {/* Location */}
                 <div>
                   <label className="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-stone-400">
                     Location
                   </label>
-                  <LocationSearch
-                    onSelect={setLocation}
-                    selectedName={location?.name}
-                  />
+                  <LocationSearch onSelect={setLocation} selectedName={location?.name} />
                 </div>
 
-                {/* AI tagging status (visible while tagging is in progress) */}
                 {aiStatus === "tagging" && (
                   <p className="flex items-center gap-1.5 text-xs text-teal-700">
                     <span className="inline-block w-3 h-3 border-2 border-teal-300 border-t-teal-600 rounded-full animate-spin" />
@@ -240,10 +255,9 @@ export default function NewPostPage() {
                   </p>
                 )}
 
-                {/* Submit */}
                 <button
                   type="submit"
-                  disabled={!file || !location || submitting || !userId}
+                  disabled={!location || submitting || (!file && !imageUrl.trim()) || !userId}
                   className="primary-button w-full rounded-2xl py-3.5 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {submitting ? (
