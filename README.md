@@ -42,6 +42,13 @@ npx convex dev
 npm run dev
 ```
 
+Add these environment variables for the shared LLM setup:
+
+```env
+AI_GATEWAY_API_KEY=
+AI_GATEWAY_MODEL=moonshotai/kimi-k2.5
+```
+
 Open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ## Project Structure
