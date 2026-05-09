@@ -1,7 +1,7 @@
 {
   "name": "Rove City",
   "short_name": "Rove City",
-  "description": "Capture photos tied to places, share them in a global feed, and explore memories on an interactive map.",
+  "description": "Travel journal for sharing anonymous location memories, browsing nearby stories, and revisiting moments on a map.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f8fafc",

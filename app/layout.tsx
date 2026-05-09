@@ -13,7 +13,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Rove City",
   description:
-    "Capture photos tied to places, share them in a global feed, and explore memories on an interactive map.",
+    "Travel journal for sharing anonymous location memories, browsing nearby stories, and revisiting moments on a map.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -27,14 +27,14 @@ export const metadata: Metadata = {
     type: "website",
     title: "Rove City",
     description:
-      "Capture photos tied to places, share them in a global feed, and explore memories on an interactive map.",
+      "Travel journal for sharing anonymous location memories, browsing nearby stories, and revisiting moments on a map.",
     siteName: "Rove City",
   },
   twitter: {
     card: "summary",
     title: "Rove City",
     description:
-      "Capture photos tied to places, share them in a global feed, and explore memories on an interactive map.",
+      "Travel journal for sharing anonymous location memories, browsing nearby stories, and revisiting moments on a map.",
   },
   icons: {
     icon: [
