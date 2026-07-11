@@ -46,7 +46,7 @@ Add these environment variables for the shared LLM setup:
 
 ```env
 AI_GATEWAY_API_KEY=
-AI_GATEWAY_MODEL=openai/gpt-5.6-luna
+AI_GATEWAY_MODEL=zai/glm-5.2
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the app.
